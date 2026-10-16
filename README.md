@@ -28,4 +28,4 @@ Neste protótipo os links ficam salvos no navegador (`localStorage`); em produç
 - **Administrador** vê todos os módulos e as telas de Clientes, Relatórios e Configurações.
 - Em **Clientes**, o administrador cadastra cada cliente e marca os módulos que ele pode acessar.
 - **Cliente** vê apenas os módulos liberados; os demais não aparecem e as rotas são bloqueadas.
-- Protótipo: usuários e senhas ficam no navegador (). Em produção, mover para API com senhas criptografadas.
+- Protótipo: usuários e senhas ficam no navegador (`localStorage`). Em produção, mover para API com senhas criptografadas.
