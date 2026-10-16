@@ -12,7 +12,7 @@ export default function Services() {
   const q = params.get('q') ?? '';
   const { pinned, toggle } = usePinned();
   const { links } = useModuleLinks();
-  const results = MODULES.filter((m) => normalize(`${m.name} ${m.description} ${m.features.join(' ')}`).includes(normalize(q)));
+  const results = MODULES.filter((m) => normalize(m.name).includes(normalize(q)));
 
   return (
     <>

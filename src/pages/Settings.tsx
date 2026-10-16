@@ -57,13 +57,11 @@ export default function Settings() {
           </div>
 
           {MODULES.map((m) => {
-            const Icon = m.icon;
             const value = draft[m.slug] ?? '';
             const bad = !isValidUrl(value.trim());
             return (
               <div key={m.slug} className="link-row">
                 <label className="link-row__name" htmlFor={`link-${m.slug}`}>
-                  <span className="module-icon"><Icon size={17} strokeWidth={1.8} /></span>
                   {m.name}
                 </label>
                 <div>

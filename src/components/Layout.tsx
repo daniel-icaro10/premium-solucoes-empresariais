@@ -5,6 +5,7 @@ import {
   Settings, UserRound, Users, BarChart3,
 } from 'lucide-react';
 import { MODULES, NOTIFICATIONS } from '../data/modules';
+import { getSession, signOut } from './useAuth';
 
 const NAV = [
   { to: '/', label: 'Início', icon: LayoutDashboard, end: true },
@@ -37,6 +38,8 @@ export default function Layout() {
   const navigate = useNavigate();
   const notifRef = useClickOutside(() => setNotifOpen(false));
   const userRef = useClickOutside(() => setUserOpen(false));
+  const session = getSession();
+  const initials = (session?.name ?? 'U').split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase();
   const unread = notifications.filter((n) => n.unread).length;
 
   useEffect(() => setMenuOpen(false), [location.pathname]);
@@ -141,9 +144,9 @@ export default function Layout() {
 
             <div ref={userRef} style={{ position: 'relative' }}>
               <button className="user-btn" onClick={() => setUserOpen((o) => !o)}>
-                <span className="avatar">AR</span>
+                <span className="avatar">{initials}</span>
                 <span className="user-btn__text">
-                  <strong>Administrador</strong>
+                  <strong>{session?.name ?? 'Usuário'}</strong>
                   <span>Premium Soluções</span>
                 </span>
                 <ChevronDown size={16} color="var(--text-3)" />
@@ -152,7 +155,16 @@ export default function Layout() {
                 <div className="popover">
                   <button className="menu-item"><UserRound size={16} /> Meu perfil</button>
                   <button className="menu-item" onClick={() => navigate('/configuracoes')}><Settings size={16} /> Configurações</button>
-                  <button className="menu-item" style={{ borderTop: '1px solid var(--border)' }}><LogOut size={16} /> Sair</button>
+                  <button
+                    className="menu-item"
+                    style={{ borderTop: '1px solid var(--border)' }}
+                    onClick={() => {
+                      signOut();
+                      navigate('/login', { replace: true });
+                    }}
+                  >
+                    <LogOut size={16} /> Sair
+                  </button>
                 </div>
               )}
             </div>

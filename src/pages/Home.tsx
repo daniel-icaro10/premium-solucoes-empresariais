@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle2, Clock3, FileText, Inbox, Plus, Users } from 'lucide-react';
-import { CATEGORIES, CLIENTS, MODULES, REQUESTS, findModule, type Category } from '../data/modules';
+import { Plus } from 'lucide-react';
+import { CATEGORIES, CLIENTS, MODULES, REQUESTS, type Category } from '../data/modules';
 import ModuleCard from '../components/ModuleCard';
 import NewRequestModal from '../components/NewRequestModal';
 import RequestsTable from '../components/RequestsTable';
@@ -38,10 +38,10 @@ export default function Home() {
       </div>
 
       <div className="stats">
-        <Stat icon={Inbox} label="Solicitações abertas" value={open + 27} delta="+4 esta semana" />
-        <Stat icon={Clock3} label="Em andamento" value={progress + 18} delta="Prazo médio 3,2 dias" />
-        <Stat icon={CheckCircle2} label="Concluídas no mês" value={done + 41} delta="+12% vs. set" />
-        <Stat icon={Users} label="Clientes ativos" value={CLIENTS.filter((c) => c.status === 'Ativo').length + 120} delta="2 em onboarding" />
+        <Stat label="Solicitações abertas" value={open + 27} delta="+4 esta semana" />
+        <Stat label="Em andamento" value={progress + 18} delta="Prazo médio 3,2 dias" />
+        <Stat label="Concluídas no mês" value={done + 41} delta="+12% vs. set" />
+        <Stat label="Clientes ativos" value={CLIENTS.filter((c) => c.status === 'Ativo').length + 120} delta="2 em onboarding" />
       </div>
 
       <div className="section-head">
@@ -79,10 +79,9 @@ export default function Home() {
           </div>
           <ul className="activity">
             {REQUESTS.slice(0, 5).map((r) => {
-              const Icon = findModule(r.module)?.icon ?? FileText;
               return (
                 <li key={r.id}>
-                  <span className="activity__icon"><Icon size={16} /></span>
+                  <span className="activity__dot" />
                   <div>
                     <p><b>{r.client}</b> · {r.title}</p>
                     <small>{r.status} · {r.updatedAt}</small>
@@ -99,10 +98,10 @@ export default function Home() {
   );
 }
 
-function Stat({ icon: Icon, label, value, delta }: { icon: typeof Inbox; label: string; value: number; delta: string }) {
+function Stat({ label, value, delta }: { label: string; value: number; delta: string }) {
   return (
     <div className="stat">
-      <div className="stat__label"><Icon size={16} /> {label}</div>
+      <div className="stat__label">{label}</div>
       <div className="stat__value">{value}</div>
       <div className="stat__delta">{delta}</div>
     </div>

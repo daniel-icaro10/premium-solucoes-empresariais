@@ -1,27 +1,9 @@
-import type { LucideIcon } from 'lucide-react';
-import {
-  Calculator,
-  Wallet,
-  BadgeCheck,
-  TrendingUp,
-  Stamp,
-  MonitorSmartphone,
-  CreditCard,
-  Landmark,
-  ShieldCheck,
-  UsersRound,
-} from 'lucide-react';
-
 export type Category = 'Gestão' | 'Financeiro' | 'Jurídico' | 'Tecnologia';
 
 export interface Module {
   slug: string;
   name: string;
-  short: string;
-  description: string;
-  icon: LucideIcon;
   category: Category;
-  features: string[];
   openRequests: number;
 }
 
@@ -31,111 +13,61 @@ export const MODULES: Module[] = [
   {
     slug: 'contabilidade',
     name: 'Contabilidade',
-    short: 'Escrituração, balanços e obrigações fiscais.',
-    description:
-      'Gestão contábil completa: escrituração, apuração de impostos, balanços, folha de pagamento e entrega de obrigações acessórias.',
-    icon: Calculator,
     category: 'Gestão',
-    features: ['Apuração de impostos', 'Folha de pagamento', 'Balanço e DRE', 'Obrigações acessórias'],
     openRequests: 12,
   },
   {
     slug: 'bpo-financeiro',
     name: 'BPO Financeiro',
-    short: 'Terceirização das rotinas financeiras.',
-    description:
-      'Contas a pagar e a receber, conciliação bancária, fluxo de caixa e relatórios gerenciais operados pela nossa equipe.',
-    icon: Wallet,
     category: 'Financeiro',
-    features: ['Contas a pagar e receber', 'Conciliação bancária', 'Fluxo de caixa', 'Relatórios gerenciais'],
     openRequests: 8,
   },
   {
     slug: 'certificado-digital',
     name: 'Certificado Digital',
-    short: 'Emissão e renovação de e-CNPJ e e-CPF.',
-    description:
-      'Emissão, renovação e gestão de vencimentos de certificados digitais A1 e A3 para empresas e pessoas físicas.',
-    icon: BadgeCheck,
     category: 'Tecnologia',
-    features: ['e-CNPJ A1 / A3', 'e-CPF A1 / A3', 'Alertas de vencimento', 'Validação por vídeo'],
     openRequests: 5,
   },
   {
     slug: 'consultoria',
     name: 'Consultoria Financeira e Empresarial',
-    short: 'Planejamento, reestruturação e crescimento.',
-    description:
-      'Diagnóstico financeiro, planejamento tributário, valuation e apoio estratégico para decisões de crescimento.',
-    icon: TrendingUp,
     category: 'Gestão',
-    features: ['Diagnóstico financeiro', 'Planejamento tributário', 'Valuation', 'Plano de negócios'],
     openRequests: 3,
   },
   {
     slug: 'marcas-patentes',
     name: 'Registro de Marcas e Patentes',
-    short: 'Proteção da propriedade intelectual no INPI.',
-    description:
-      'Busca de anterioridade, depósito e acompanhamento de processos de marcas, patentes e desenhos industriais no INPI.',
-    icon: Stamp,
     category: 'Jurídico',
-    features: ['Busca de anterioridade', 'Depósito no INPI', 'Acompanhamento de processo', 'Renovações'],
     openRequests: 4,
   },
   {
     slug: 'softwares',
     name: 'Venda de Softwares',
-    short: 'ERP, gestão e automação comercial.',
-    description:
-      'Licenciamento, implantação e suporte de softwares de gestão, ERP, emissão fiscal e automação comercial.',
-    icon: MonitorSmartphone,
     category: 'Tecnologia',
-    features: ['ERP e gestão', 'Emissor de notas', 'Implantação', 'Suporte técnico'],
     openRequests: 6,
   },
   {
     slug: 'maquinas-cartao',
     name: 'Venda de Máquinas de Cartão',
-    short: 'Maquininhas com as melhores taxas.',
-    description:
-      'Comparativo de adquirentes, negociação de taxas e fornecimento de máquinas de cartão e link de pagamento.',
-    icon: CreditCard,
     category: 'Financeiro',
-    features: ['Comparativo de taxas', 'POS e smart POS', 'Link de pagamento', 'Antecipação de recebíveis'],
     openRequests: 7,
   },
   {
     slug: 'linhas-credito',
     name: 'Linhas de Crédito',
-    short: 'Capital de giro e financiamentos.',
-    description:
-      'Análise de perfil e intermediação de capital de giro, financiamento de equipamentos e linhas governamentais.',
-    icon: Landmark,
     category: 'Financeiro',
-    features: ['Capital de giro', 'Financiamento de equipamentos', 'Linhas BNDES', 'Análise de crédito'],
     openRequests: 9,
   },
   {
     slug: 'seguros',
     name: 'Seguros',
-    short: 'Proteção patrimonial, vida e frota.',
-    description:
-      'Cotação e gestão de apólices empresariais: patrimonial, responsabilidade civil, vida em grupo, saúde e frota.',
-    icon: ShieldCheck,
     category: 'Financeiro',
-    features: ['Seguro empresarial', 'Vida em grupo', 'Frota', 'Responsabilidade civil'],
     openRequests: 2,
   },
   {
     slug: 'consorcio',
     name: 'Consórcio',
-    short: 'Imóveis, veículos e equipamentos.',
-    description:
-      'Planejamento de aquisição via consórcio para imóveis, veículos pesados, máquinas e equipamentos sem juros.',
-    icon: UsersRound,
     category: 'Financeiro',
-    features: ['Imóveis', 'Veículos e pesados', 'Máquinas e equipamentos', 'Simulação de lances'],
     openRequests: 1,
   },
 ];
