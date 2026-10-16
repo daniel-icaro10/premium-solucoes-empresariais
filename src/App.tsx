@@ -1,7 +1,7 @@
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import { ToastProvider } from './components/Toast';
-import { getSession } from './components/useAuth';
+import { useSession } from './components/useAuth';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Services from './pages/Services';
@@ -12,8 +12,12 @@ import Settings from './pages/Settings';
 
 function RequireAuth() {
   const location = useLocation();
-  if (!getSession()) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  if (!useSession()) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   return <Outlet />;
+}
+
+function RequireAdmin() {
+  return useSession()?.role === 'admin' ? <Outlet /> : <Navigate to="/" replace />;
 }
 
 export default function App() {
@@ -26,9 +30,11 @@ export default function App() {
             <Route index element={<Home />} />
             <Route path="servicos" element={<Services />} />
             <Route path="servicos/:slug" element={<NoLink />} />
-            <Route path="clientes" element={<Clients />} />
-            <Route path="relatorios" element={<Reports />} />
-            <Route path="configuracoes" element={<Settings />} />
+            <Route element={<RequireAdmin />}>
+              <Route path="clientes" element={<Clients />} />
+              <Route path="relatorios" element={<Reports />} />
+              <Route path="configuracoes" element={<Settings />} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

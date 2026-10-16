@@ -4,15 +4,16 @@ import {
   Bell, ChevronDown, Headphones, LayoutDashboard, LayoutGrid, LogOut, Menu, Search,
   Settings, UserRound, Users, BarChart3,
 } from 'lucide-react';
-import { MODULES, NOTIFICATIONS } from '../data/modules';
-import { getSession, signOut } from './useAuth';
+import { NOTIFICATIONS } from '../data/modules';
+import { modulesFor } from '../data/users';
+import { signOut, useSession } from './useAuth';
 
 const NAV = [
   { to: '/', label: 'Início', icon: LayoutDashboard, end: true },
-  { to: '/servicos', label: 'Serviços', icon: LayoutGrid, count: MODULES.length },
-  { to: '/clientes', label: 'Clientes', icon: Users },
-  { to: '/relatorios', label: 'Relatórios', icon: BarChart3 },
-  { to: '/configuracoes', label: 'Configurações', icon: Settings },
+  { to: '/servicos', label: 'Serviços', icon: LayoutGrid, showCount: true },
+  { to: '/clientes', label: 'Clientes', icon: Users, adminOnly: true },
+  { to: '/relatorios', label: 'Relatórios', icon: BarChart3, adminOnly: true },
+  { to: '/configuracoes', label: 'Configurações', icon: Settings, adminOnly: true },
 ];
 
 function useClickOutside(onOutside: () => void) {
@@ -38,7 +39,8 @@ export default function Layout() {
   const navigate = useNavigate();
   const notifRef = useClickOutside(() => setNotifOpen(false));
   const userRef = useClickOutside(() => setUserOpen(false));
-  const session = getSession();
+  const session = useSession();
+  const isAdmin = session?.role === 'admin';
   const initials = (session?.name ?? 'U').split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase();
   const unread = notifications.filter((n) => n.unread).length;
 
@@ -63,11 +65,11 @@ export default function Layout() {
         </div>
         <nav className="nav">
           <div className="nav__label">Central de Serviços</div>
-          {NAV.map(({ to, label, icon: Icon, end, count }) => (
+          {NAV.filter((n) => isAdmin || !n.adminOnly).map(({ to, label, icon: Icon, end, showCount }) => (
             <NavLink key={to} to={to} end={end}>
               <Icon size={18} strokeWidth={1.8} />
               {label}
-              {count !== undefined && <span className="count">{count}</span>}
+              {showCount && <span className="count">{modulesFor(session).length}</span>}
             </NavLink>
           ))}
         </nav>
@@ -107,54 +109,57 @@ export default function Layout() {
           </form>
 
           <div className="topbar__actions">
-            <div ref={notifRef} style={{ position: 'relative' }}>
-              <button className="icon-btn" aria-label="Notificações" onClick={() => setNotifOpen((o) => !o)}>
-                <Bell size={19} strokeWidth={1.8} />
-                {unread > 0 && <span className="dot" />}
-              </button>
-              {notifOpen && (
-                <div className="popover" style={{ width: 'min(340px, calc(100vw - 32px))' }}>
-                  <div className="popover__head">
-                    <strong>Notificações</strong>
-                    {unread > 0 && (
+            {/* Notificações citam outros clientes: só para o administrador. */}
+            {isAdmin && (
+              <div ref={notifRef} style={{ position: 'relative' }}>
+                <button className="icon-btn" aria-label="Notificações" onClick={() => setNotifOpen((o) => !o)}>
+                  <Bell size={19} strokeWidth={1.8} />
+                  {unread > 0 && <span className="dot" />}
+                </button>
+                {notifOpen && (
+                  <div className="popover" style={{ width: 'min(340px, calc(100vw - 32px))' }}>
+                    <div className="popover__head">
+                      <strong>Notificações</strong>
+                      {unread > 0 && (
+                        <button
+                          className="cell-sub"
+                          onClick={() => setNotifications((ns) => ns.map((n) => ({ ...n, unread: false })))}
+                        >
+                          Marcar todas como lidas
+                        </button>
+                      )}
+                    </div>
+                    {notifications.map((n) => (
                       <button
-                        className="cell-sub"
-                        onClick={() => setNotifications((ns) => ns.map((n) => ({ ...n, unread: false })))}
+                        key={n.id}
+                        className="popover__item"
+                        onClick={() => setNotifications((ns) => ns.map((x) => (x.id === n.id ? { ...x, unread: false } : x)))}
                       >
-                        Marcar todas como lidas
+                        <span className={n.unread ? 'unread-dot' : 'read-dot'} />
+                        <div>
+                          <p>{n.title}</p>
+                          <small>{n.time}</small>
+                        </div>
                       </button>
-                    )}
+                    ))}
                   </div>
-                  {notifications.map((n) => (
-                    <button
-                      key={n.id}
-                      className="popover__item"
-                      onClick={() => setNotifications((ns) => ns.map((x) => (x.id === n.id ? { ...x, unread: false } : x)))}
-                    >
-                      <span className={n.unread ? 'unread-dot' : 'read-dot'} />
-                      <div>
-                        <p>{n.title}</p>
-                        <small>{n.time}</small>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             <div ref={userRef} style={{ position: 'relative' }}>
               <button className="user-btn" onClick={() => setUserOpen((o) => !o)}>
                 <span className="avatar">{initials}</span>
                 <span className="user-btn__text">
                   <strong>{session?.name ?? 'Usuário'}</strong>
-                  <span>Premium Soluções</span>
+                  <span>{isAdmin ? 'Premium Soluções' : session?.company}</span>
                 </span>
                 <ChevronDown size={16} color="var(--text-3)" />
               </button>
               {userOpen && (
                 <div className="popover">
                   <button className="menu-item"><UserRound size={16} /> Meu perfil</button>
-                  <button className="menu-item" onClick={() => navigate('/configuracoes')}><Settings size={16} /> Configurações</button>
+                  {isAdmin && <button className="menu-item" onClick={() => navigate('/configuracoes')}><Settings size={16} /> Configurações</button>}
                   <button
                     className="menu-item"
                     style={{ borderTop: '1px solid var(--border)' }}

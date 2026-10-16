@@ -427,3 +427,28 @@ textarea.input { height: auto; padding: 10px 12px; resize: vertical; }
   .login { grid-template-columns: 1fr; }
   .login__brand { display: none; }
 }
+
+/* ---------- Cadastro de clientes ---------- */
+.modal--wide { max-width: 720px; display: flex; flex-direction: column; max-height: calc(100vh - 32px); }
+.modal--wide .modal__body { overflow-y: auto; }
+.module-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.row-actions { display: flex; justify-content: flex-end; gap: 2px; }
+.segmented { display: flex; height: 38px; padding: 3px; border-radius: var(--radius-sm); background: var(--neutral-bg); border: 1px solid var(--border); }
+.segmented button { flex: 1; border-radius: 6px; font-weight: 500; color: var(--text-2); }
+.segmented button.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+.module-picker { position: relative; border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px 16px; margin: 4px 0 0; min-width: 0; }
+.module-picker legend { padding: 0 6px; margin-left: -6px; font-weight: 600; font-size: 13px; }
+.module-picker__all { position: absolute; top: -10px; right: 12px; padding: 0 6px; background: var(--surface); font-size: 13px; font-weight: 500; color: var(--brand-700); }
+.module-picker__all:hover { text-decoration: underline; }
+.module-picker__group + .module-picker__group { margin-top: 14px; }
+.module-picker__cat { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 8px; }
+.module-picker__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.check {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+  transition: border-color .15s, background .15s;
+}
+.check:hover { border-color: var(--border-strong); }
+.check.on { border-color: var(--brand-800); background: var(--brand-50); color: var(--brand-900); }
+.check input { width: 16px; height: 16px; margin: 0; accent-color: var(--brand-800); flex-shrink: 0; }
+@media (max-width: 600px) { .module-picker__grid { grid-template-columns: 1fr; } }

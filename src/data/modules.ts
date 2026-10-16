@@ -98,28 +98,6 @@ export const REQUESTS: ServiceRequest[] = [
   { id: 'SOL-1033', module: 'consorcio', client: 'Clínica Vida Plena', title: 'Consórcio de equipamento médico', status: 'Concluída', updatedAt: '08 out' },
 ];
 
-export type ClientStatus = 'Ativo' | 'Onboarding' | 'Inativo';
-
-export interface Client {
-  id: string;
-  name: string;
-  cnpj: string;
-  contact: string;
-  email: string;
-  services: string[];
-  status: ClientStatus;
-}
-
-export const CLIENTS: Client[] = [
-  { id: 'c1', name: 'Alfa Engenharia Ltda.', cnpj: '12.345.678/0001-90', contact: 'Marina Costa', email: 'marina@alfaeng.com.br', services: ['contabilidade', 'seguros', 'bpo-financeiro'], status: 'Ativo' },
-  { id: 'c2', name: 'Café Bom Grão ME', cnpj: '23.456.789/0001-01', contact: 'João Pereira', email: 'joao@bomgrao.com.br', services: ['certificado-digital', 'softwares'], status: 'Ativo' },
-  { id: 'c3', name: 'Transportes Rota Sul', cnpj: '34.567.890/0001-12', contact: 'Ricardo Alves', email: 'ricardo@rotasul.com.br', services: ['linhas-credito', 'consultoria', 'consorcio'], status: 'Onboarding' },
-  { id: 'c4', name: 'Clínica Vida Plena', cnpj: '45.678.901/0001-23', contact: 'Dra. Paula Mendes', email: 'paula@vidaplena.med.br', services: ['bpo-financeiro', 'consorcio'], status: 'Ativo' },
-  { id: 'c5', name: 'Studio Norte Design', cnpj: '56.789.012/0001-34', contact: 'Lucas Ferreira', email: 'lucas@studionorte.com', services: ['marcas-patentes'], status: 'Ativo' },
-  { id: 'c6', name: 'Mercado Bairro Novo', cnpj: '67.890.123/0001-45', contact: 'Ana Souza', email: 'ana@bairronovo.com.br', services: ['maquinas-cartao', 'contabilidade'], status: 'Ativo' },
-  { id: 'c7', name: 'Oficina Torque Máximo', cnpj: '78.901.234/0001-56', contact: 'Paulo Lima', email: 'paulo@torquemax.com.br', services: ['contabilidade'], status: 'Inativo' },
-];
-
 export const MONTHLY = [
   { month: 'Mai', value: 38 },
   { month: 'Jun', value: 44 },

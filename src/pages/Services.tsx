@@ -1,6 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 import { Search, SearchX } from 'lucide-react';
-import { MODULES } from '../data/modules';
+import { modulesFor } from '../data/users';
+import { useSession } from '../components/useAuth';
 import ModuleCard from '../components/ModuleCard';
 import { usePinned } from '../components/usePinned';
 import { useModuleLinks } from '../components/useModuleLinks';
@@ -12,7 +13,8 @@ export default function Services() {
   const q = params.get('q') ?? '';
   const { pinned, toggle } = usePinned();
   const { links } = useModuleLinks();
-  const results = MODULES.filter((m) => normalize(m.name).includes(normalize(q)));
+  const available = modulesFor(useSession());
+  const results = available.filter((m) => normalize(m.name).includes(normalize(q)));
 
   return (
     <>
@@ -20,7 +22,7 @@ export default function Services() {
         <div>
           <div className="eyebrow">Catálogo</div>
           <h1>Serviços</h1>
-          <p>Todos os {MODULES.length} módulos oferecidos pela Premium Soluções Empresariais.</p>
+          <p>{available.length} módulos disponíveis para o seu acesso.</p>
         </div>
         <div className="search-input" style={{ width: 'min(320px, 100%)' }}>
           <Search size={16} />

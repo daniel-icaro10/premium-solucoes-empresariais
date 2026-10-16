@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
-import { getSession, signIn } from '../components/useAuth';
+import { signIn, useSession } from '../components/useAuth';
+import { useUsers } from '../data/users';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,8 +13,10 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const { users } = useUsers();
+  const session = useSession();
   const from = (location.state as { from?: string } | null)?.from ?? '/';
-  if (getSession()) return <Navigate to={from} replace />;
+  if (session) return <Navigate to={from} replace />;
 
   return (
     <div className="login">
@@ -33,13 +36,12 @@ export default function Login() {
           onSubmit={(e) => {
             e.preventDefault();
             if (!/^\S+@\S+\.\S+$/.test(email)) return setError('Informe um e-mail válido.');
-            if (password.length < 4) return setError('Informe sua senha.');
+            if (!password) return setError('Informe sua senha.');
+            const failure = signIn(users, email, password);
+            if (failure) return setError(failure);
             setError('');
             setLoading(true);
-            window.setTimeout(() => {
-              signIn(email);
-              navigate(from, { replace: true });
-            }, 500);
+            window.setTimeout(() => navigate(from, { replace: true }), 400);
           }}
         >
           <img src="/logo.png" alt="Premium Soluções Empresariais" className="login__logo" />

@@ -1,15 +1,14 @@
-import type { ClientStatus, RequestStatus } from '../data/modules';
+import type { RequestStatus } from '../data/modules';
 
-const VARIANT: Record<RequestStatus | ClientStatus, string> = {
+const VARIANT: Record<RequestStatus | 'Ativo' | 'Inativo', string> = {
   Aberta: 'badge--info',
   'Em andamento': 'badge--info',
   'Aguardando cliente': 'badge--warning',
   Concluída: 'badge--success',
   Ativo: 'badge--success',
-  Onboarding: 'badge--warning',
   Inativo: '',
 };
 
-export default function StatusBadge({ status }: { status: RequestStatus | ClientStatus }) {
+export default function StatusBadge({ status }: { status: RequestStatus | 'Ativo' | 'Inativo' }) {
   return <span className={`badge ${VARIANT[status]}`}>{status}</span>;
 }

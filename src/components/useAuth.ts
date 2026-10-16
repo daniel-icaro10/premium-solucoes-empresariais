@@ -1,26 +1,33 @@
+import { useUsers, type User } from '../data/users';
+
 const KEY = 'premium:session';
 
-export interface Session {
-  name: string;
-  email: string;
-}
-
-// Protótipo: a sessão fica no navegador. Em produção, trocar por autenticação no servidor.
-export function getSession(): Session | null {
+function sessionId(): string | null {
   try {
-    return JSON.parse(localStorage.getItem(KEY) ?? 'null');
+    return localStorage.getItem(KEY);
   } catch {
     return null;
   }
 }
 
-export function signIn(email: string) {
-  const name = email.split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+/** Usuário logado, lido do cadastro a cada render para refletir mudanças de acesso. */
+export function useSession(): User | null {
+  const { users } = useUsers();
+  const id = sessionId();
+  const user = users.find((u) => u.id === id);
+  return user && user.active ? user : null;
+}
+
+export function signIn(users: User[], email: string, password: string): string | null {
+  const user = users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
+  if (!user || user.password !== password) return 'E-mail ou senha incorretos.';
+  if (!user.active) return 'Este acesso está desativado. Fale com o administrador.';
   try {
-    localStorage.setItem(KEY, JSON.stringify({ name, email }));
+    localStorage.setItem(KEY, user.id);
   } catch {
     /* armazenamento indisponível */
   }
+  return null;
 }
 
 export function signOut() {

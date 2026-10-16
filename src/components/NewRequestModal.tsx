@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { X } from 'lucide-react';
-import { CLIENTS, MODULES } from '../data/modules';
+import { MODULES } from '../data/modules';
+import { useUsers } from '../data/users';
 import { useToast } from './Toast';
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 
 export default function NewRequestModal({ moduleSlug, onClose }: Props) {
   const toast = useToast();
+  const clients = useUsers().users.filter((u) => u.role === 'cliente');
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -50,7 +52,7 @@ export default function NewRequestModal({ moduleSlug, onClose }: Props) {
           <div className="field">
             <label htmlFor="req-client">Cliente</label>
             <select id="req-client" className="input">
-              {CLIENTS.map((c) => <option key={c.id}>{c.name}</option>)}
+              {clients.map((c) => <option key={c.id}>{c.company}</option>)}
             </select>
           </div>
           <div className="field">
