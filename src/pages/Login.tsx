@@ -12,6 +12,8 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [remember, setRemember] = useState(true);
+  const [forgot, setForgot] = useState(false);
 
   const { users } = useUsers();
   const session = useSession();
@@ -37,7 +39,7 @@ export default function Login() {
             e.preventDefault();
             if (!/^\S+@\S+\.\S+$/.test(email)) return setError('Informe um e-mail válido.');
             if (!password) return setError('Informe sua senha.');
-            const failure = signIn(users, email, password);
+            const failure = signIn(users, email, password, remember);
             if (failure) return setError(failure);
             setError('');
             setLoading(true);
@@ -56,7 +58,7 @@ export default function Login() {
           <div className="field">
             <div className="login__label-row">
               <label htmlFor="password">Senha</label>
-              <a href="#" onClick={(e) => e.preventDefault()}>Esqueci minha senha</a>
+              <button type="button" className="login__link" onClick={() => setForgot(true)}>Esqueci minha senha</button>
             </div>
             <div className="login__password">
               <input id="password" type={showPassword ? 'text' : 'password'} className="input" autoComplete="current-password" placeholder="Sua senha" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -67,9 +69,14 @@ export default function Login() {
           </div>
 
           <label className="login__remember">
-            <input type="checkbox" defaultChecked /> Manter conectado
+            <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} /> Manter conectado
           </label>
 
+          {forgot && (
+            <div className="login__notice" role="status">
+              Para redefinir sua senha, fale com o administrador da Premium Soluções Empresariais.
+            </div>
+          )}
           {error && <div className="field-error" role="alert">{error}</div>}
 
           <button type="submit" className="btn btn--primary login__submit" disabled={loading}>

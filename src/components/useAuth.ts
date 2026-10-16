@@ -2,9 +2,10 @@ import { useUsers, type User } from '../data/users';
 
 const KEY = 'premium:session';
 
+// "Manter conectado" grava em localStorage; sem ele, em sessionStorage (some ao fechar o navegador).
 function sessionId(): string | null {
   try {
-    return localStorage.getItem(KEY);
+    return localStorage.getItem(KEY) ?? sessionStorage.getItem(KEY);
   } catch {
     return null;
   }
@@ -18,12 +19,13 @@ export function useSession(): User | null {
   return user && user.active ? user : null;
 }
 
-export function signIn(users: User[], email: string, password: string): string | null {
+export function signIn(users: User[], email: string, password: string, remember: boolean): string | null {
   const user = users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
   if (!user || user.password !== password) return 'E-mail ou senha incorretos.';
   if (!user.active) return 'Este acesso está desativado. Fale com o administrador.';
   try {
-    localStorage.setItem(KEY, user.id);
+    signOut();
+    (remember ? localStorage : sessionStorage).setItem(KEY, user.id);
   } catch {
     /* armazenamento indisponível */
   }
@@ -33,6 +35,7 @@ export function signIn(users: User[], email: string, password: string): string |
 export function signOut() {
   try {
     localStorage.removeItem(KEY);
+    sessionStorage.removeItem(KEY);
   } catch {
     /* armazenamento indisponível */
   }

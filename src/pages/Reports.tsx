@@ -1,6 +1,20 @@
 import { Download } from 'lucide-react';
-import { MODULES, MONTHLY, REQUESTS } from '../data/modules';
+import { MODULES, MONTHLY, REQUESTS, findModule } from '../data/modules';
 import RequestsTable from '../components/RequestsTable';
+
+/** Baixa as solicitações em CSV (separador ";" para abrir direto no Excel em pt-BR). */
+function exportCsv() {
+  const header = ['Código', 'Solicitação', 'Serviço', 'Cliente', 'Status', 'Atualizado'];
+  const rows = REQUESTS.map((r) => [r.id, r.title, findModule(r.module)?.name ?? '', r.client, r.status, r.updatedAt]);
+  const csv = [header, ...rows].map((row) => row.map((v) => `"${v.replace(/"/g, '""')}"`).join(';')).join('\r\n');
+  const url = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+  const a = Object.assign(document.createElement('a'), { href: url, download: 'solicitacoes.csv' });
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  // Revogar só depois que o navegador iniciar o download.
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
 export default function Reports() {
   const max = Math.max(...MONTHLY.map((m) => m.value));
@@ -15,7 +29,7 @@ export default function Reports() {
           <h1>Relatórios</h1>
           <p>Volume de solicitações e desempenho por serviço.</p>
         </div>
-        <button className="btn btn--ghost"><Download size={16} /> Exportar</button>
+        <button className="btn btn--ghost" onClick={exportCsv}><Download size={16} /> Exportar</button>
       </div>
 
       <div className="two-col" style={{ marginTop: 0 }}>

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   Bell, ChevronDown, Headphones, LayoutDashboard, LayoutGrid, LogOut, Menu, Search,
-  Settings, UserRound, Users, BarChart3,
+  Settings, Users, BarChart3,
 } from 'lucide-react';
 import { NOTIFICATIONS } from '../data/modules';
 import { modulesFor } from '../data/users';
@@ -158,11 +158,14 @@ export default function Layout() {
               </button>
               {userOpen && (
                 <div className="popover">
-                  <button className="menu-item"><UserRound size={16} /> Meu perfil</button>
+                  <div className="popover__head" style={{ display: 'block' }}>
+                    <strong>{session?.name}</strong>
+                    <div className="cell-sub">{session?.email}</div>
+                  </div>
                   {isAdmin && <button className="menu-item" onClick={() => navigate('/configuracoes')}><Settings size={16} /> Configurações</button>}
                   <button
                     className="menu-item"
-                    style={{ borderTop: '1px solid var(--border)' }}
+                    style={isAdmin ? { borderTop: '1px solid var(--border)' } : undefined}
                     onClick={() => {
                       signOut();
                       navigate('/login', { replace: true });
