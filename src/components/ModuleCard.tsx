@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
 import { MODULES, type Module } from '../data/modules';
+import ModuleIcon from './ModuleIcon';
 
 interface Props {
   module: Module;
@@ -24,6 +25,8 @@ export default function ModuleCard({ module, pinned, onTogglePin, url }: Props) 
           <Star size={16} fill={pinned ? 'currentColor' : 'none'} />
         </button>
       </div>
+      <ModuleIcon slug={module.slug} />
+      <span className="module-card__divider" />
       <h3>{module.name}</h3>
       <div className="module-card__foot">
         {/* Com link cadastrado abre o sistema externo; sem link, a página de aviso. */}

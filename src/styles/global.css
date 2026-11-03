@@ -229,6 +229,24 @@ h1, h2, h3, h4, p { margin: 0; }
 .pin-btn:hover { background: var(--neutral-bg); color: var(--text); }
 .pin-btn.on { color: var(--accent-500); }
 .module-card h3 { font-size: 16px; font-weight: 600; letter-spacing: -.01em; line-height: 1.35; }
+.module-card h3 { text-align: center; }
+.module-card .module-card__foot { justify-content: center; }
+.module-icon {
+  position: relative; align-self: center; width: 80px; height: 80px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--brand-50); color: var(--brand-950);
+  margin-top: -6px;
+}
+.module-icon__main.gold { color: var(--accent-600); }
+.module-icon__mark {
+  position: absolute; inset: 0; display: grid; place-items: center; padding-bottom: 2px;
+  font-size: 14px; font-weight: 700; color: var(--accent-600);
+}
+.module-icon__badge {
+  position: absolute; right: 6px; bottom: 6px; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--surface); color: var(--accent-600);
+  box-shadow: 0 0 0 2px var(--brand-50);
+}
+.module-card__divider { align-self: center; width: 28px; height: 2px; border-radius: 2px; background: var(--accent-500); margin: 14px 0 12px; }
 .module-card__foot { gap: 8px;
   display: flex; align-items: center; justify-content: space-between;
   margin-top: auto; padding-top: 16px;

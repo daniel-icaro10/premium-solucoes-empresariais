@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Bell, ChevronDown, Headphones, LayoutDashboard, LayoutGrid, LogOut, Menu, Search,
+  Bell, ChevronDown, Headphones, House, LayoutGrid, LogOut, Menu, Search,
   Settings, Users, BarChart3,
 } from 'lucide-react';
 import { NOTIFICATIONS } from '../data/modules';
@@ -9,7 +9,7 @@ import { modulesFor } from '../data/users';
 import { signOut, useSession } from './useAuth';
 
 const NAV = [
-  { to: '/', label: 'Início', icon: LayoutDashboard, end: true },
+  { to: '/', label: 'Início', icon: House, end: true },
   { to: '/servicos', label: 'Serviços', icon: LayoutGrid, showCount: true },
   { to: '/clientes', label: 'Clientes', icon: Users, adminOnly: true },
   { to: '/relatorios', label: 'Relatórios', icon: BarChart3, adminOnly: true },
