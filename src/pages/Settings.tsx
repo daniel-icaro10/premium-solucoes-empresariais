@@ -5,6 +5,33 @@ import { MODULES } from '../data/modules';
 import { useToast } from '../components/Toast';
 import { isValidUrl, useModuleLinks, type ModuleLinks } from '../components/useModuleLinks';
 
+const COMPANY_KEY = 'premium:company';
+const PREFS_KEY = 'premium:notification-prefs';
+
+const COMPANY_FIELDS = [
+  { key: 'razao', label: 'Razão social', value: 'Premium Soluções Empresariais Ltda.' },
+  { key: 'cnpj', label: 'CNPJ', value: '00.000.000/0001-00' },
+  { key: 'email', label: 'E-mail de contato', value: 'contato@premiumsolucoes.com.br' },
+  { key: 'phone', label: 'Telefone', value: '(11) 4000-0000' },
+];
+
+function readJson<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? { ...fallback, ...JSON.parse(raw) } : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeJson(key: string, value: unknown) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* armazenamento indisponível */
+  }
+}
+
 const PREFS = [
   { key: 'email', title: 'Notificações por e-mail', desc: 'Receba atualizações de status das solicitações.' },
   { key: 'cert', title: 'Alertas de vencimento', desc: 'Avisos de certificados digitais e apólices próximos do vencimento.' },
@@ -16,7 +43,12 @@ export default function Settings() {
   const { hash } = useLocation();
   const { links, save } = useModuleLinks();
   const [draft, setDraft] = useState<ModuleLinks>(links);
-  const [prefs, setPrefs] = useState<Record<string, boolean>>({ email: true, cert: true, weekly: false });
+  const [prefs, setPrefs] = useState<Record<string, boolean>>(() =>
+    readJson(PREFS_KEY, { email: true, cert: true, weekly: false }),
+  );
+  const [company] = useState<Record<string, string>>(() =>
+    readJson(COMPANY_KEY, Object.fromEntries(COMPANY_FIELDS.map((f) => [f.key, f.value]))),
+  );
 
   useEffect(() => {
     if (hash) document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
@@ -104,15 +136,19 @@ export default function Settings() {
           className="panel"
           onSubmit={(e) => {
             e.preventDefault();
+            const data = new FormData(e.currentTarget);
+            writeJson(COMPANY_KEY, Object.fromEntries(COMPANY_FIELDS.map((f) => [f.key, String(data.get(f.key) ?? '').trim()])));
             toast('Alterações salvas');
           }}
         >
           <div className="panel__head"><h2>Dados da empresa</h2></div>
           <div className="panel__body form-grid">
-            <div className="field"><label>Razão social</label><input className="input" defaultValue="Premium Soluções Empresariais Ltda." /></div>
-            <div className="field"><label>CNPJ</label><input className="input" defaultValue="00.000.000/0001-00" /></div>
-            <div className="field"><label>E-mail de contato</label><input className="input" defaultValue="contato@premiumsolucoes.com.br" /></div>
-            <div className="field"><label>Telefone</label><input className="input" defaultValue="(11) 4000-0000" /></div>
+            {COMPANY_FIELDS.map((f) => (
+              <div key={f.key} className="field">
+                <label htmlFor={`company-${f.key}`}>{f.label}</label>
+                <input id={`company-${f.key}`} name={f.key} className="input" defaultValue={company[f.key]} />
+              </div>
+            ))}
           </div>
           <div className="panel__foot" style={{ justifyContent: 'flex-end' }}>
             <button className="btn btn--primary" type="submit">Salvar alterações</button>
@@ -133,7 +169,11 @@ export default function Settings() {
                   aria-checked={prefs[p.key]}
                   aria-label={p.title}
                   className={`switch ${prefs[p.key] ? 'on' : ''}`}
-                  onClick={() => setPrefs((s) => ({ ...s, [p.key]: !s[p.key] }))}
+                  onClick={() => {
+                    const next = { ...prefs, [p.key]: !prefs[p.key] };
+                    setPrefs(next);
+                    writeJson(PREFS_KEY, next);
+                  }}
                 />
               </div>
             ))}

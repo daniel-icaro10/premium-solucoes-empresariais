@@ -10,11 +10,12 @@ npm run build    # gera dist/
 
 - `src/styles/global.css` — design system (tokens de cor, tipografia, componentes)
 - `src/data/modules.ts` — módulos, clientes e solicitações (dados de demonstração)
-- `src/pages/` — Início, Serviços, Detalhe do módulo, Clientes, Relatórios, Configurações
+- `src/components/ModuleIcon.tsx` — ícone de cada módulo (baseado em `referenciaicones.jpeg`)
+- `src/pages/` — Login, Início, Serviços, Clientes, Relatórios, Configurações e aviso de módulo sem link
 
 ## Links dos módulos
 
-Em **Configurações → Links dos módulos** o cliente cadastra a URL do sistema de cada módulo.
+Em **Configurações → Links dos módulos** o administrador cadastra a URL do sistema de cada módulo.
 Com o link cadastrado, "Abrir módulo" abre esse sistema em nova aba; sem link, abre a página interna do módulo.
 Neste protótipo os links ficam salvos no navegador (`localStorage`); em produção devem ir para a API/banco.
 
