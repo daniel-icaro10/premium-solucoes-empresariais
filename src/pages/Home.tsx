@@ -38,7 +38,7 @@ export default function Home() {
         <div>
           <div className="eyebrow">{today}</div>
           <h1>Bem-vindo(a), {session?.name.split(' ')[0]}</h1>
-          <p>{isAdmin ? 'Acesse os módulos disponíveis e acompanhe as solicitações dos clientes.' : `Acesse os serviços contratados por ${(session?.company ?? "").replace(/.$/, "")}.`}</p>
+          <p>{isAdmin ? 'Acesse os módulos disponíveis e acompanhe as solicitações dos clientes.' : `Acesse os serviços contratados por ${(session?.company ?? "").replace(/\.$/, '')}.`}</p>
         </div>
         {isAdmin && (
           <button className="btn btn--primary" onClick={() => setModalOpen(true)}>
