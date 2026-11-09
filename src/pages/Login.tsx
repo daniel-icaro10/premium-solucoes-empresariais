@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { signIn, useSession } from '../components/useAuth';
 import { useUsers } from '../data/users';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export default function Login() {
       </aside>
 
       <main className="login__main">
+        <ThemeToggle className="login__theme" />
         <form
           className="login__form"
           noValidate

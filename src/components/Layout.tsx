@@ -7,6 +7,7 @@ import {
 import { NOTIFICATIONS } from '../data/modules';
 import { modulesFor } from '../data/users';
 import { signOut, useSession } from './useAuth';
+import ThemeToggle from './ThemeToggle';
 
 const NAV = [
   { to: '/', label: 'Início', icon: House, end: true },
@@ -109,6 +110,7 @@ export default function Layout() {
           </form>
 
           <div className="topbar__actions">
+            <ThemeToggle />
             {/* Notificações citam outros clientes: só para o administrador. */}
             {isAdmin && (
               <div ref={notifRef} style={{ position: 'relative' }}>
