@@ -1,0 +1,13 @@
+# PRODUÇÃO na VPS (a mesma do Rebanho/Calculus, com Easypanel/Traefik nas portas 80/443).
+# O código fica em /opt/premium e é enviado pelo deploy/deploy.sh.
+#   cd /opt/premium && docker compose -f docker-compose.vps.yml up -d --build
+# Sem domínio, abre em http://IP:3300. Com domínio: aponte-o no Easypanel para a porta 3300 do host.
+name: premium
+
+services:
+  app:
+    build: .
+    image: premium-app
+    restart: unless-stopped
+    ports:
+      - "3300:80"
